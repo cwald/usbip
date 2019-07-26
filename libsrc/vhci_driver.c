@@ -150,7 +150,12 @@ static int get_nports(struct udev_device *hc_device)
 
 static int vhci_hcd_filter(const struct dirent *dirent)
 {
-	return strcmp(dirent->d_name, "vhci_hcd") >= 0;
+	size_t l = strlen(dirent->d_name);
+	if (l < 8)
+		return 0;
+	if (memcmp(dirent->d_name, "vhci_hcd", 8))
+		return 0;
+	return 1;
 }
 
 static int get_ncontrollers(void)
